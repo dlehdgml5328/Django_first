@@ -3,6 +3,7 @@
 {% block title %}설문조사 시스템{% endblock %}
 
 {% block content %}
+<a href="{% url 'polls:question_create' %}">글생성</a>
 <h1>최근 질문</h1>
 {% if latest_question_list %}
 <ul>
@@ -15,6 +16,6 @@
     {% endfor %}
 </ul>
 {% else %}
-<p>No polls are available.</p>
+<p>질문이 없습니다.</p>
 {% endif %}
 {% endblock %}

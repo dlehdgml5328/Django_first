@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse ,reverse_lazy
 from django.views import generic
 from django.db.models import F
+   
 
 from .models import Question, Choice  # ← 이거 중요!
 
@@ -46,3 +47,16 @@ def vote(request, question_id):
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
+
+class QuestionCreatView(generic.CreateView):
+    model =Question
+    fields =["question_text","pub_date"]
+    template_name ="polls/question_form.html"
+    success_url = reverse_lazy("polls:index")
+
+class QuestionUpdateView(generic.UpdateView):
+    pass
+class QuestionDeleteView(generic.DeleteView):
+    pass
+
+
