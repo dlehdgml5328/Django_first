@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse ,reverse_lazy
 from django.views import generic
 from django.db.models import F
-   
+from django.utils import timezone
 
 from .models import Question, Choice  # ← 이거 중요!
 
@@ -13,21 +13,24 @@ class IndexView(generic.ListView):
     context_object_name = "latest_question_list"
 
     def get_queryset(self):
-        return Question.objects.order_by("-pub_date")[:5]
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
 
-
-# 질문 상세 페이지
 class DetailView(generic.DetailView):
     model = Question
     template_name = "polls/detail.html"
     context_object_name = "question"
 
+    def get_queryset(self):
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
-# 결과 페이지
+
 class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
     context_object_name = "question"
+
+    def get_queryset(self):
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
 # 투표 처리 로직
 def vote(request, question_id):
@@ -61,7 +64,6 @@ class QuestionUpdateView(generic.UpdateView):
     success_url = reverse_lazy("polls:index")
 class QuestionDeleteView(generic.DeleteView):
     model =Question
-    fields =["question_text","pub_date"]
     template_name ="polls/question_form_delete.html"
     success_url = reverse_lazy("polls:index")
 
