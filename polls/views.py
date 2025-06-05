@@ -47,7 +47,7 @@ def vote(request, question_id):
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
-
+#CRUD 생성하기
 class QuestionCreatView(generic.CreateView):
     model =Question
     fields =["question_text","pub_date"]
@@ -55,8 +55,14 @@ class QuestionCreatView(generic.CreateView):
     success_url = reverse_lazy("polls:index")
 
 class QuestionUpdateView(generic.UpdateView):
-    pass
+    model =Question
+    fields =["question_text","pub_date"]
+    template_name ="polls/question_form.html"
+    success_url = reverse_lazy("polls:index")
 class QuestionDeleteView(generic.DeleteView):
-    pass
+    model =Question
+    fields =["question_text","pub_date"]
+    template_name ="polls/question_form_delete.html"
+    success_url = reverse_lazy("polls:index")
 
 
